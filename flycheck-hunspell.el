@@ -1,25 +1,45 @@
-;;; flycheck-hunspell --- simple spell checking with hunspell and flycheck
+;;; flycheck-hunspell --- simple spell checking with hunspell and flycheck -*- lexical-binding: t; -*-
+
+;; Author: Leo Gaskin <leo.gaskin@brg-feldkirchen.at>
+;; Created: 24 May 2019
+;; Homepage: https://github.com/leotaku/flycheck-hunspell
+;; Keywords: flycheck, spell, hunspell
+;; Package-Version: 0.1.0
+;; Package-Requires: ((flycheck "31") (emacs "25.1"))
+
+;; This file is not part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary
 
 ;; This package adds support for spell checking to flycheck using
 ;; the hunspell (https://hunspell.github.io) command line interface.
-
+;; 
 ;; In particular it (ab)uses its "-u1" flag which provides a ispell-like
 ;; (though not 100% compatible) communication format that can be parsed.
-
+;; 
 ;; The package currently defines checkers for TeX with fixed languages (de).
 ;; This is done because the author of this package pefers it for their workflow.
-
+;; 
 ;; Enable your preferred checkers by adding them to `flycheck-checkers` like so:
-
 ;; (add-to-list 'flycheck-checkers 'tex-hunspell-lang)
-
+;; 
 ;; You may also want to automatically enable flycheck for TeX or any other mode.
-
+;; 
 ;; You may also want to advice `ispell-pdict-save` for instant feedback when inserting
 ;; new entries into your local dictionary:
-
 ;; (advice-add 'ispell-pdict-save :after 'flyspell-recheck-idle)
 ;; (defun flyspell-recheck-idle (_)
 ;;   (flycheck-buffer))
