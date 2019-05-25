@@ -47,43 +47,43 @@
 	(setq count (1+ count)))
        ;; # indicates that no replacement could be found
        ((string-match "^#" line)
-	(progn
-	  (string-match
-	   (rx line-start "# "		; start
-	       (group (+ char)) " "	; error
-	       (group (+ digit)))	; column
-	   line)
-	  (push
-	   (flycheck-error-new-at
-	    count
-	    (1+ (string-to-number (match-string 2 line)))
-	    'error
-	    (concat "Unknown: " (match-string 1 line))
-	    :checker 'hunspell-generic
-	    :filename (buffer-file-name buffer)
-	    :buffer buffer)
-	   return)))
+	(push (flycheck-hunspell-handle-hash line buffer) return))
        ;; & indicates that replacements could be found
        ((string-match-p "^&" line)
-	(progn
-	  (string-match
-	   (rx line-start "& "		; start
-	       (group (+ char)) " "	; error
-	       (+ digit) " "		; suggestion count
-	       (group (+ digit)) ": "	; column
-	       (group (+? anything)) line-end)
-	   line)
-	  (push
-	   (flycheck-error-new-at
-	    count
-	    (1+ (string-to-number (match-string 2 line)))
-	    'error
-	    (concat "Suggest: " (match-string 1 line) " -> " (match-string 3 line))
-	    :checker 'hunspell-generic
-	    :filename (buffer-file-name buffer)
-	    :buffer buffer)
-	   return)))))
+	(push (flycheck-hunspell-handle-and line buffer) return))))
     return))
+
+(defun flycheck-hunspell-handle-hash (line buffer)
+  (string-match
+   (rx line-start "# "			; start
+       (group (+ char)) " "		; error
+       (group (+ digit)))		; column
+   line)
+  (flycheck-error-new-at
+   count
+   (1+ (string-to-number (match-string 2 line)))
+   'error
+   (concat "Unknown: " (match-string 1 line))
+   :checker 'hunspell-generic
+   :filename (buffer-file-name buffer)
+   :buffer buffer))
+
+(defun flycheck-hunspell-handle-and (line buffer)
+  (string-match
+   (rx line-start "& "			; start
+       (group (+ char)) " "		; error
+       (+ digit) " "			; suggestion count
+       (group (+ digit)) ": "		; column
+       (group (+? anything)) line-end)
+   line)
+  (flycheck-error-new-at
+   count
+   (1+ (string-to-number (match-string 2 line)))
+   'error
+   (concat "Suggest: " (match-string 1 line) " -> " (match-string 3 line))
+   :checker 'hunspell-generic
+   :filename (buffer-file-name buffer)
+   :buffer buffer))
 
 (provide 'flycheck-hunspell)
 
