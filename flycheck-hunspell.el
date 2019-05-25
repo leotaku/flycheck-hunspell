@@ -27,7 +27,7 @@
 ;; * flyspell-hunspell :README:
 
 ;; This package adds support for spell checking to flycheck using
-;; the hunspell (https://hunspell.github.io) command line interface.
+;; the [[https://hunspell.github.io][hunspell]] command line interface.
 
 ;; In particular it (ab)uses its "-u1" flag which provides a ispell-like
 ;; (though not 100% compatible) communication format that can be parsed.
