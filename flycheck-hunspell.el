@@ -49,6 +49,9 @@
 ;;   :after flycheck)
 ;; #+end_src
 
+;; You of course also need to install the =hunspell= binary.
+;; Most major linux distributions package it and there's probably a working macport.
+
 ;; ** Configuration
 
 ;; Enable your preferred checkers by adding them to =flycheck-checkers= like so:
