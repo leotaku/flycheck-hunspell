@@ -26,6 +26,8 @@
 
 ;; * flyspell-hunspell :README:
 
+;; [[./screenshot.png][flyspell-hunspell in action]]
+
 ;; This package adds support for spell checking to flycheck using
 ;; the [[https://hunspell.github.io][hunspell]] command line interface.
 
