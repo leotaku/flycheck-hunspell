@@ -101,13 +101,13 @@
 	(setq count (1+ count)))
        ;; # indicates that no replacement could be found
        ((string-match "^#" line)
-	(push (flycheck-hunspell-handle-hash line buffer) return))
+	(push (flycheck-hunspell-handle-hash count line buffer) return))
        ;; & indicates that replacements could be found
        ((string-match-p "^&" line)
-	(push (flycheck-hunspell-handle-and line buffer) return))))
+	(push (flycheck-hunspell-handle-and count line buffer) return))))
     return))
 
-(defun flycheck-hunspell-handle-hash (line buffer)
+(defun flycheck-hunspell-handle-hash (count line buffer)
   (string-match
    (rx line-start "# "			; start
        (group (+ char)) " "		; error
@@ -122,7 +122,7 @@
    :filename (buffer-file-name buffer)
    :buffer buffer))
 
-(defun flycheck-hunspell-handle-and (line buffer)
+(defun flycheck-hunspell-handle-and (count line buffer)
   (string-match
    (rx line-start "& "			; start
        (group (+ char)) " "		; error
