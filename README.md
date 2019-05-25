@@ -1,15 +1,15 @@
 Note: this file is auto converted from flycheck-hunspell.el by [el2org](https://github.com/tumashu/el2org), please do not edit it by hand!!!
 
-- [flyspell-hunspell](#orgb922f41)
-  - [Installation](#orga0a6c53)
-  - [Configuration](#orgc31761a)
+- [flyspell-hunspell](#orgdd95edf)
+  - [Installation](#orgb0e38ef)
+  - [Configuration](#orge49a1b7)
 
 
-<a id="orgb922f41"></a>
+<a id="orgdd95edf"></a>
 
 # flyspell-hunspell
 
-[flyspell-hunspell in action](./screenshot.png)
+![flyspell-hunspell in action](screenshot.png)
 
 This package adds support for spell checking to flycheck using the [hunspell](https://hunspell.github.io) command line interface.
 
@@ -18,7 +18,7 @@ In particular it (ab)uses its "-u1" flag which provides a ispell-like (though no
 The package currently defines checkers for TeX with fixed languages (de). This is done because the author of this package pefers it for their workflow.
 
 
-<a id="orga0a6c53"></a>
+<a id="orgb0e38ef"></a>
 
 ## Installation
 
@@ -32,7 +32,7 @@ I recommend using [straight.el](https://github.com/raxod502/straight.el) for ins
 ```
 
 
-<a id="orgc31761a"></a>
+<a id="orge49a1b7"></a>
 
 ## Configuration
 
