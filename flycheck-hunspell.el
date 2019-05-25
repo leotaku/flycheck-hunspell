@@ -34,7 +34,9 @@
 ;; In particular it (ab)uses its "-u1" flag which provides a ispell-like
 ;; (though not 100% compatible) communication format that can be parsed.
 
-;; The package currently defines checkers for TeX with fixed languages (de).
+;; The package currently defines checkers for TeX, nroff/troff/groff, HTML, XML and
+;; plain text files with dynamic languages (based on the ispell-local-dictionary).
+;; There is also a static de_AT TeX checker for debugging purposes.
 ;; This is done because the author of this package pefers it for their workflow.
 
 ;; ** Installation
@@ -92,6 +94,8 @@
 
 (require 'flycheck)
 
+;;;; Checkers
+
 (flycheck-define-checker tex-hunspell-de
   "A spell checker for TeX files using hunspell"
   :command ("hunspell"
@@ -109,6 +113,44 @@
   :standard-input t
   :modes (tex-mode latex-mode context-mode)
   :error-parser flycheck-parse-hunspell)
+
+(flycheck-define-checker html-hunspell-dynamic
+  "A spell checker for HTML files using hunspell"
+  :command ("hunspell"
+	    (option "-d" ispell-local-dictionary)
+	    "-u1" "-H")
+  :standard-input t
+  :modes (html-mode)
+  :error-parser flycheck-parse-hunspell)
+
+(flycheck-define-checker html-hunspell-dynamic
+  "A spell checker for XML files using hunspell"
+  :command ("hunspell"
+	    (option "-d" ispell-local-dictionary)
+	    "-u1" "-X")
+  :standard-input t
+  :modes (xml-mode)
+  :error-parser flycheck-parse-hunspell)
+
+(flycheck-define-checker nroff-hunspell-dynamic
+  "A spell checker for nroff/troff/groff files using hunspell"
+  :command ("hunspell"
+	    (option "-d" ispell-local-dictionary)
+	    "-u1" "-n")
+  :standard-input t
+  :modes (nroff-mode)
+  :error-parser flycheck-parse-hunspell)
+
+(flycheck-define-checker plain-hunspell-dynamic
+  "A spell checker for (mostly) plain text files using hunspell"
+  :command ("hunspell"
+	    (option "-d" ispell-local-dictionary)
+	    "-u1")
+  :standard-input t
+  :modes (markdown-mode asciidoc-mode org-mode)
+  :error-parser flycheck-parse-hunspell)
+
+;;;; Library
 
 (defun flycheck-parse-hunspell (output checker buffer)
   (let ((return nil)
@@ -158,5 +200,6 @@
    :filename (buffer-file-name buffer)
    :buffer buffer))
 
-(provide 'flycheck-hunspell)
+;;;; End
 
+(provide 'flycheck-hunspell)
