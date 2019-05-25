@@ -1,11 +1,11 @@
 Note: this file is auto converted from flycheck-hunspell.el by [el2org](https://github.com/tumashu/el2org), please do not edit it by hand!!!
 
-- [flyspell-hunspell](#orga05abca)
-  - [Installation](#org84b8542)
-  - [Configuration](#org44ff6be)
+- [flyspell-hunspell](#org2f7e1c4)
+  - [Installation](#orge238509)
+  - [Configuration](#org0363dc0)
 
 
-<a id="orga05abca"></a>
+<a id="org2f7e1c4"></a>
 
 # flyspell-hunspell
 
@@ -15,10 +15,10 @@ This package adds support for spell checking to flycheck using the [hunspell](ht
 
 In particular it (ab)uses its "-u1" flag which provides a ispell-like (though not 100% compatible) communication format that can be parsed.
 
-The package currently defines checkers for TeX, dynamic languages (using the ispell-dictionary). This is done because the author of this package pefers it for their workflow.
+The package currently defines checkers for TeX, nroff/troff/groff, HTML, XML and plain text files with dynamic languages (based on the ispell-local-dictionary). There is also a static de<sub>AT</sub> TeX checker for debugging purposes. This is done because the author of this package pefers it for their workflow.
 
 
-<a id="org84b8542"></a>
+<a id="orge238509"></a>
 
 ## Installation
 
@@ -34,7 +34,7 @@ I recommend using [straight.el](https://github.com/raxod502/straight.el) for ins
 You of course also need to install the `hunspell` binary. Most major linux distributions package it and there's probably a working macport.
 
 
-<a id="org44ff6be"></a>
+<a id="org0363dc0"></a>
 
 ## Configuration
 
