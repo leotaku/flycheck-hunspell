@@ -57,7 +57,7 @@
 ;; Enable your preferred checkers by adding them to =flycheck-checkers= like so:
  
 ;; #+begin_src elisp
-;; (add-to-list 'flycheck-checkers 'tex-hunspell-lang)
+;; (add-to-list 'flycheck-checkers 'tex-hunspell-dynamic)
 ;; #+end_src
 
 ;; You may also want to automatically enable flycheck for TeX or any other mode.
@@ -66,13 +66,23 @@
 ;; (add-hook 'your-mode-hook 'flycheck-mode)
 ;; #+end_src
 
+;; For steamless ispell integration, I recommend setting the following variables:
+
+;; #+begin_src elisp
+;; (setq ispell-dictionary "your_DICT"
+;;      ispell-program-name "hunspell"
+;; 	ispell-really-hunspell t
+;; 	ispell-silently-savep t)
+;; (setq-default ispell-local-dictionary ispell-dictionary)
+;; #+end_src
+
 ;; You may also want to advice `ispell-pdict-save` for instant feedback when inserting
 ;; new entries into your local dictionary:
  
 ;; #+begin_src elisp
 ;; (advice-add 'ispell-pdict-save :after 'flyspell-recheck)
 ;; (defun flyspell-recheck (_)
-;;   (when (bound-and-true-p flycheck)
+;;   (when (bound-and-true-p flycheck-mode)
 ;;    (flycheck-buffer))
 ;; #+end_src
 
@@ -86,6 +96,15 @@
   "A spell checker for TeX files using hunspell"
   :command ("hunspell"
 	    "-d" "de_AT"
+	    "-u1" "-t")
+  :standard-input t
+  :modes (tex-mode latex-mode context-mode)
+  :error-parser flycheck-parse-hunspell)
+
+(flycheck-define-checker tex-hunspell-dynamic
+  "A spell checker for TeX files using hunspell"
+  :command ("hunspell"
+	    (option "-d" ispell-local-dictionary)
 	    "-u1" "-t")
   :standard-input t
   :modes (tex-mode latex-mode context-mode)
