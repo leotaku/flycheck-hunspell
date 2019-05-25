@@ -24,25 +24,54 @@
 
 ;;; Commentary
 
+;; * flyspell-hunspell :README:
+
 ;; This package adds support for spell checking to flycheck using
 ;; the hunspell (https://hunspell.github.io) command line interface.
-;; 
+
 ;; In particular it (ab)uses its "-u1" flag which provides a ispell-like
 ;; (though not 100% compatible) communication format that can be parsed.
-;; 
+
 ;; The package currently defines checkers for TeX with fixed languages (de).
 ;; This is done because the author of this package pefers it for their workflow.
-;; 
-;; Enable your preferred checkers by adding them to `flycheck-checkers` like so:
+
+;; ** Installation
+
+;; I recommend using [[https://github.com/raxod502/straight.el][straight.el]] for
+;; installing non-(m)elpa sources.
+
+;; #+begin_src elisp
+;; (use-package flycheck-hunspell
+;;   :straight (flycheck-hunspell :type git :host github
+;; 			          :repo "leotaku/flycheck-hunspell")
+;;   :after flycheck)
+;; #+end_src
+
+;; ** Configuration
+
+;; Enable your preferred checkers by adding them to =flycheck-checkers= like so:
+ 
+;; #+begin_src elisp
 ;; (add-to-list 'flycheck-checkers 'tex-hunspell-lang)
-;; 
+;; #+end_src
+
 ;; You may also want to automatically enable flycheck for TeX or any other mode.
-;; 
+
+;; #+begin_src elisp
+;; (add-hook 'your-mode-hook 'flycheck-mode)
+;; #+end_src
+
 ;; You may also want to advice `ispell-pdict-save` for instant feedback when inserting
 ;; new entries into your local dictionary:
-;; (advice-add 'ispell-pdict-save :after 'flyspell-recheck-idle)
-;; (defun flyspell-recheck-idle (_)
-;;   (flycheck-buffer))
+ 
+;; #+begin_src elisp
+;; (advice-add 'ispell-pdict-save :after 'flyspell-recheck)
+;; (defun flyspell-recheck (_)
+;;   (when (bound-and-true-p flycheck)
+;;    (flycheck-buffer))
+;; #+end_src
+
+;; * bottom delimiter for el2org :code:
 
 ;;; Code
 
