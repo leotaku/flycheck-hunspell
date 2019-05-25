@@ -87,22 +87,3 @@
 
 (provide 'flycheck-hunspell)
 
-;;; Outdated code
-
-;; (setq prose-hunspell-dictionary "en_US")
-
-;; (flycheck-define-checker prose-hunspell
-;;   "A spell checker usning the hunspell tool"
-;;   :command ("hunspell" "-u3"
-;; 	    (option-flag "-d" prose-hunspell-dictionary))
-;;   :standard-input t
-;;   :modes (markdown-mode text-mode TeX-mode LaTeX-mode nroff-mode)
-;;   :error-patterns
-;;   ((error line-start "(null):" line ": " (message) line-end)))
-
-;; (flycheck-define-checker tex-hunspell-de
-;;   "A spell checker for TeX files using hunspell"
-;;   :command ("hunspell"
-;; 	    "-d" "de_AT"
-;; 	    "-t" "-u2"))
-
