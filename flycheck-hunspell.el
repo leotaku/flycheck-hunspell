@@ -71,11 +71,10 @@
 ;; For steamless ispell integration, I recommend setting the following variables:
 
 ;; #+begin_src elisp
-;; (setq ispell-dictionary "your_DICT"
+;; (setq ispell-dictionary "some_dictionary"
 ;;      ispell-program-name "hunspell"
 ;; 	ispell-really-hunspell t
 ;; 	ispell-silently-savep t)
-;; (setq-default ispell-local-dictionary ispell-dictionary)
 ;; #+end_src
 
 ;; You may also want to advice `ispell-pdict-save` for instant feedback when inserting
@@ -96,7 +95,7 @@
 
 ;;;; Checkers
 
-(flycheck-define-checker tex-hunspell-de
+(flycheck-define-checker tex-hunspell-testing
   "A spell checker for TeX files using hunspell"
   :command ("hunspell"
 	    "-d" "de_AT"
@@ -105,58 +104,48 @@
   :modes (tex-mode latex-mode context-mode)
   :error-parser flycheck-parse-hunspell)
 
-(flycheck-define-checker tex-hunspell-dynamic
-  "A spell checker for TeX files using hunspell"
-  :command ("hunspell"
-	    (option "-d" ispell-local-dictionary)
-	    "-u1" "-t")
-  :standard-input t
-  :modes (tex-mode latex-mode context-mode)
-  :error-parser flycheck-parse-hunspell)
+(defmacro flycheck-hunspell-define-checker-for-ft (filetype filetype-doc flag modes)
+  `(flycheck-define-checker ,(intern (concat filetype "-hunspell-dynamic"))
+     (concat "A spell checker for " ,filetype-doc " files using hunspell.")
+     :command
+     ,(append
+       '("hunspell"
+	 "-d" (eval (or ispell-local-dictionary
+			ispell-dictionary))
+	 "-u1")
+       (when flag
+	 (list flag)))
+     :standard-input t
+     :modes ,modes
+     :error-parser flycheck-parse-hunspell))
 
-(flycheck-define-checker html-hunspell-dynamic
-  "A spell checker for HTML files using hunspell"
-  :command ("hunspell"
-	    (option "-d" ispell-local-dictionary)
-	    "-u1" "-H")
-  :standard-input t
-  :modes (html-mode)
-  :error-parser flycheck-parse-hunspell)
+(flycheck-hunspell-define-checker-for-ft
+ "tex" "TeX" "-t" (tex-mode latex-mode context-mode))
 
-(flycheck-define-checker html-hunspell-dynamic
-  "A spell checker for XML files using hunspell"
-  :command ("hunspell"
-	    (option "-d" ispell-local-dictionary)
-	    "-u1" "-X")
-  :standard-input t
-  :modes (xml-mode)
-  :error-parser flycheck-parse-hunspell)
+(flycheck-hunspell-define-checker-for-ft
+ "html" "HTML" "-H" (html-mode))
 
-(flycheck-define-checker nroff-hunspell-dynamic
-  "A spell checker for nroff/troff/groff files using hunspell"
-  :command ("hunspell"
-	    (option "-d" ispell-local-dictionary)
-	    "-u1" "-n")
-  :standard-input t
-  :modes (nroff-mode)
-  :error-parser flycheck-parse-hunspell)
+(flycheck-hunspell-define-checker-for-ft
+ "nroff" "nroff/troff/groff" "-n" (nroff-mode))
 
-(flycheck-define-checker plain-hunspell-dynamic
-  "A spell checker for (mostly) plain text files using hunspell"
-  :command ("hunspell"
-	    (option "-d" ispell-local-dictionary)
-	    "-u1")
-  :standard-input t
-  :modes (markdown-mode asciidoc-mode org-mode)
-  :error-parser flycheck-parse-hunspell)
+(flycheck-hunspell-define-checker-for-ft
+ "xml" "XML" "-X" (xml-mode))
+
+(flycheck-hunspell-define-checker-for-ft
+ "plain" "(mostly) plain text" nil
+ (markdown-mode asciidoc-mode org-mode))
 
 ;;;; Library
 
+;;;###autoload
 (defun flycheck-parse-hunspell (output checker buffer)
   (let ((return nil)
 	(count 1))
     (dolist (line (split-string output "\n"))
       (cond
+       ;; * indicates correctly spelled words
+       ((string-match-p "^*" line)
+	nil)
        ;; empty lines mean newlines in source
        ((string-match-p "^$" line)
 	(setq count (1+ count)))
