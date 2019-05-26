@@ -170,7 +170,9 @@
    (concat "Unknown: " (match-string 1 line))
    :checker 'hunspell-generic
    :filename (buffer-file-name buffer)
-   :buffer buffer))
+   :buffer buffer
+   ;; :group (match-string 1 line)
+   ))
 
 (defun flycheck-hunspell-handle-and (count line buffer)
   (string-match
@@ -187,7 +189,21 @@
    (concat "Suggest: " (match-string 1 line) " -> " (match-string 3 line))
    :checker 'hunspell-generic
    :filename (buffer-file-name buffer)
-   :buffer buffer))
+   :buffer buffer
+   ;; :group (match-string 1 line)
+   ))
+
+;; Test for respecting local words, does not work
+
+;; (defun flycheck-hunspell-error-filter (errors)
+;;   (let (return)
+;;     (message "%s" ispell-buffer-session-localwords)
+;;     (dolist (err errors)
+;;       (let (group (flycheck-error-group err))
+;;   	(unless (member group ispell-buffer-session-localwords)
+;;   	  ;; (setf (flycheck-error-group err) nil)
+;;   	  (push err return))))
+;;     return))
 
 ;;;; End
 
